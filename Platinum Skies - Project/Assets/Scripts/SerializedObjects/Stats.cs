@@ -3,22 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// This Enum represents all of the different types of stats in the game.
+// If more stats are needed, the list can be extended with new variables.
 public enum StatType
 {
     health,
     damage,
-    damageMultiplier,
     speed,
-    detectionRange,
     firingSpeed,
     score
 }
 
-[Serializable] public class StatList
+// The factions determine which other factions can be damaged by attacks
+public enum Faction
 {
-    public List<StatValue> statValues;
+    player,
+    enemy,
+    other
 }
 
+// This is an inbetween step to suppliment a dictionary in the inspector.
 [Serializable] public class StatValue
 {
     public StatType stat;
@@ -29,9 +33,8 @@ public enum StatType
 [CreateAssetMenu(menuName = "Stat set")]
 public class Stats : ScriptableObject
 {
-    public StatList baseStatList;
-    public StatList maxStatList;
-    // public StatDictionary testDictionary = new StatDictionary();
+    public List<StatValue> baseStatList;
+    public List<StatValue> maxStatList;
 
     public Dictionary<StatType, float> stat = new Dictionary<StatType, float> {};
     public Dictionary<StatType, float> baseStat = new Dictionary<StatType, float> {};
@@ -40,9 +43,9 @@ public class Stats : ScriptableObject
 
     public void SetStats()
     {
-        stat = NewDictionary(baseStatList.statValues);
-        baseStat = NewDictionary(baseStatList.statValues);
-        maxStat = NewDictionary(maxStatList.statValues);
+        stat = NewDictionary(baseStatList);
+        baseStat = NewDictionary(baseStatList);
+        maxStat = NewDictionary(maxStatList);
     }
 
     public Dictionary<StatType, float> NewDictionary(List<StatValue> statValues)
